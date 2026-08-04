@@ -18,6 +18,9 @@ def download_stock_data(tickers, period = "5y"):
 
     data = yf.download(tickers, period=period)
 
+    if isinstance(data.columns, pd.MultiIndex):
+        data.columns = data.columns.get_level_values(0)
+
     return data
 
 
