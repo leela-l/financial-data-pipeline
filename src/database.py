@@ -3,7 +3,7 @@ import sqlite3
 from pathlib import Path
 import pandas as pd
 
-def load_csv_to_sqlite():
+def main():
     conn = sqlite3.connect("stock_data.db")
     # Opens a connection to the SQLite database file named "stock_data.db"
     # If the file does not exist, it will be created
@@ -43,5 +43,5 @@ def load_csv_to_sqlite():
 
 
 if __name__ == "__main__":
-    load_csv_to_sqlite()
+    main()
 
