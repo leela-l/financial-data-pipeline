@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 
 
-def query_stock_data():
+def main():
     conn = sqlite3.connect("stock_data.db")
 
     tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA']
@@ -16,9 +16,6 @@ def query_stock_data():
     avg_closing_prices = {}
     # Number of trading days
     trading_days = {}
-
-    print(pd.read_sql_query("SELECT * FROM stock_prices LIMIT 5", conn))
-    print(pd.read_sql_query("PRAGMA table_info(stock_prices)", conn))
 
     for ticker in tickers:
         result_av_returns = pd.read_sql_query(
@@ -104,4 +101,4 @@ def query_stock_data():
 
 
 if __name__ == "__main__":
-    query_stock_data()
+    main()
