@@ -4,6 +4,7 @@ from src.extract import main as extract
 from src.transform import main as transform
 from src.database import main as database
 from src.queries import main as queries
+from src.model import main as model
 
 import logging
 
@@ -43,6 +44,9 @@ def main():
 
     logger.info("Running SQL queries...")
     queries()
+
+    logger.info("Performing machine learning predictions...")
+    model()
 
     logger.info("Pipeline complete")
 
