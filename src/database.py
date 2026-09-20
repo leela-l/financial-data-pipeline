@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     conn = sqlite3.connect("stock_data.db")
+    conn.execute("DROP TABLE IF EXISTS stock_prices")
     # Opens a connection to the SQLite database file named "stock_data.db"
     # If the file does not exist, it will be created
 

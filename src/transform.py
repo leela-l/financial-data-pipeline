@@ -59,7 +59,11 @@ def add_features(df):
     df["20-Day Moving Average"] = df["Close"].rolling(window=20).mean()
         # calculates the rolling average closing price over the last 20 days
 
-    logger.info(f"Added features: Daily Price Change, Daily Return, Daily Trading Range, 20-Day Moving Average")
+    df["5-Day Moving Average"] = df["Close"].rolling(window=5).mean()
+
+    df["5-Day Volatility"] = df["Daily Return"].rolling(window=5).std()
+
+    logger.info(f"Added features: Daily Price Change, Daily Return, Daily Trading Range, 20-Day Moving Average, 5-Day Moving Average, 5-Day Volatility")
 
     return df
 
