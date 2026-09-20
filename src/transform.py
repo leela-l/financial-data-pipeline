@@ -94,11 +94,16 @@ def main():
 
         logger.info(f"Processing {csv_file.name}...")
 
-        df = pd.read_csv(csv_file, index_col=0, parse_dates=True)
-        # reads each CSV file into a pandas DataFrame
-        # index_col=0 argument specifies that the first column should be used as the index 
-        # parse_dates=True tells pandas to parse the index as dates
+        try:
+            df = pd.read_csv(csv_file, index_col=0, parse_dates=True)
+            # reads each CSV file into a pandas DataFrame
+            # index_col=0 argument specifies that the first column should be used as the index 
+            # parse_dates=True tells pandas to parse the index as dates
         
+        except Exception as e:
+            logger.error(f"Skipping {csv_file.name}: failed to read{e}")
+            continue
+
         df = clean_data(df)
         df = add_features(df)
         
