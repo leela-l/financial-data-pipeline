@@ -1,5 +1,10 @@
 import pandas as pd
 from pathlib import Path
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+logger = logging.getLogger(__name__)
 
 
 # Path is a class in the pathlib module that provides an object-oriented interface for working with file system paths
@@ -19,7 +24,7 @@ def clean_data(df):
 
     df = df.drop_duplicates()
 
-    print(f"Dropped {duplicates} duplicate rows")
+    logger.info(f"Dropped {duplicates} duplicate rows")
     
      
     missing_rows = df.isnull().sum().sum()
@@ -27,7 +32,7 @@ def clean_data(df):
     df = df.dropna()
     # drops the row with missing values in any columns
     
-    print(f"Dropped {missing_rows} rows with missing values")
+    logger.info(f"Dropped {missing_rows} rows with missing values")
 
     return df
 
@@ -54,7 +59,7 @@ def add_features(df):
     df["20-Day Moving Average"] = df["Close"].rolling(window=20).mean()
         # calculates the rolling average closing price over the last 20 days
 
-    print (f"Added features: Daily Price Change, Daily Return, Daily Trading Range, 20-Day Moving Average")
+    logger.info(f"Added features: Daily Price Change, Daily Return, Daily Trading Range, 20-Day Moving Average")
 
     return df
 
@@ -68,7 +73,7 @@ def save_processed_data(df, output_path):
         output_path (Path): Path to save the CSV file.
     """
     df.to_csv(output_path)
-    print(f"Saved processed data to {output_path}")
+    logger.info(f"Saved processed data to {output_path}")
       
 
 
@@ -87,7 +92,7 @@ def main():
     for csv_file in RAW_FOLDER.glob("*.csv"):
         # uses the glob method of the Path object to find all CSV files in the raw folder
 
-        print(f"Processing {csv_file.name}...")
+        logger.info(f"Processing {csv_file.name}...")
 
         df = pd.read_csv(csv_file, index_col=0, parse_dates=True)
         # reads each CSV file into a pandas DataFrame

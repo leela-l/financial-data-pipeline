@@ -13,25 +13,18 @@ transforms it with pandas, stores it in SQLite and performs SQL analysis.
 - Git
 - GitHub
 
-## Project structure
+## Installation
 
-financial-data-pipeline/
-│
-├── Data/
-│ ├── raw/ # Raw stock CSV files downloaded from the API
-│ └── processed/ # Cleaned datasets with added useful features
-│
-├── src/
-│ ├── extract.py # Extracts stock market data and saves raw CSV files
-│ ├── transform.py # Cleans data and creates additional features
-│ ├── database.py # Loads processed data into a SQLite database
-│ └── queries.py # Runs SQL queries to analyse stock performance
-│
-├── main.py # Runs the complete ETL pipeline
-├── stock_data.db # SQLite database containing processed stock data
-├── requirements.txt # Python dependencies
-└── README.md # Project documentation
+```bash
+git clone https://github.com/leela-l/financial-data-pipeline.git
+cd financial-data-pipeline
+pip install -r requirements.txt
+```
 
 ## How to run
 
+```bash
 python main.py
+```
+
+This runs the full pipeline. It downloads historical stock data, cleans and transforms it with pandas, loads it into a local SQLite database (`stock_data.db`), and executes the SQL analysis queries.

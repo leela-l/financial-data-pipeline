@@ -1,6 +1,11 @@
 import yfinance as yf
 import pandas as pd
 import os
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+logger = logging.getLogger(__name__)
 
 
 TICKERS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA']
@@ -14,7 +19,7 @@ def download_stock_data(tickers, period = "5y"):
         period (str): Period for which to download data.
     """
 
-    print(f"Downloading stock data for {tickers}")
+    logger.info(f"Downloading stock data for {tickers}")
 
     data = yf.download(tickers, period=period)
 
@@ -41,7 +46,7 @@ def save_data_to_csv(data, ticker, folder='Data/raw'):
     file_path = os.path.join(folder, f"{ticker}.csv")
     # Could just do folder + "/" + f"{ticker}.csv" but os.path.join is more robust and cross-platform
     data.to_csv(file_path)
-    print(f"Saved data for {ticker} to {file_path}")
+    logger.info(f"Saved data for {ticker} to {file_path}")
 
 
 def main():

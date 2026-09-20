@@ -2,6 +2,11 @@ import sqlite3
 # No pip install needed, sqlite3 is part of the Python standard library
 from pathlib import Path
 import pandas as pd
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+logger = logging.getLogger(__name__)
 
 def main():
     conn = sqlite3.connect("stock_data.db")
@@ -12,7 +17,7 @@ def main():
 
     for csv_file in PROCESSED_FOLDER.glob("*.csv"):
         
-        print(f"Loading {csv_file.name} into database...")
+        logger.info(f"Loading {csv_file.name} into database...")
 
         df = pd.read_csv(csv_file, index_col=0, parse_dates=True)
         # reads each CSV file into a pandas DataFrame

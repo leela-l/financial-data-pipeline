@@ -5,12 +5,18 @@ from src.transform import main as transform
 from src.database import main as database
 from src.queries import main as queries
 
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+logger = logging.getLogger(__name__)
+
 def clean_previous_data():
     # Delete database
     db_file = Path("stock_data.db")
     if db_file.exists():
         db_file.unlink()
-        print("Deleted old database")
+        logger.info("Deleted old database")
 
     # Delete old CSV files
     folders = [
@@ -22,23 +28,23 @@ def clean_previous_data():
         if folder.exists():
             for file in folder.glob("*.csv"):
                 file.unlink()
-                print(f"Deleted {file}")
+                logger.info(f"Deleted {file}")
 
 def main():
     clean_previous_data()
-    print("Downloading stock data...")
+    logger.info("Downloading stock data...")
     extract()
 
-    print("Transforming data...")
+    logger.info("Transforming data...")
     transform()
 
-    print("Loading database...")
+    logger.info("Loading database...")
     database()
 
-    print("Running SQL queries...")
+    logger.info("Running SQL queries...")
     queries()
 
-    print("Pipeline complete")
+    logger.info("Pipeline complete")
 
 if __name__ == "__main__":
     main()
