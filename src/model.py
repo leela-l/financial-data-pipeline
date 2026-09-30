@@ -2,7 +2,7 @@ import sqlite3
 from matplotlib import ticker
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_error, root_mean_squared_error
 import matplotlib.pyplot as plt
 
 
@@ -50,11 +50,17 @@ def train_and_evaluate(df, ticker):
     
     baseline_preds = df["Close"].iloc[split:]   # today's close as the prediction for tomorrow
 
-    baseline_mae = mean_absolute_error(y_test, baseline_preds)
-    print(f"[{ticker}] Model MAE: ${mae:.2f} | Persistence MAE: ${baseline_mae:.2f}")
+      
+    model_mae = mean_absolute_error(y_test, preds)
+    base_mae = mean_absolute_error(y_test, baseline_preds)
+    model_rmse = root_mean_squared_error(y_test, preds)
+    base_rmse = root_mean_squared_error(y_test, baseline_preds)
 
-    mae = mean_absolute_error(y_test, preds)
-    print(f"[{ticker}] Mean absolute error on next-day close prediction: ${mae:.2f}")
+    improvement = (base_mae - model_mae) / base_mae * 100  # positive = model better
+
+    print(f"[{ticker}] MAE  model: ${model_mae:.2f} | baseline: ${base_mae:.2f}")
+    print(f"[{ticker}] RMSE model: ${model_rmse:.2f} | baseline: ${base_rmse:.2f}")
+    print(f"[{ticker}] Model vs baseline (MAE): {improvement:+.1f}%")
 
     plt.figure(figsize=(10, 5))
     plt.plot(y_test.values, label="Actual")
@@ -66,7 +72,7 @@ def train_and_evaluate(df, ticker):
     plt.savefig(f"Data/processed/{ticker}_prediction_plot.png")
     plt.close()
 
-    return model, mae
+    return model, model_mae, base_mae
 
 
 def main():
