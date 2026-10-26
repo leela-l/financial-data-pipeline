@@ -2,6 +2,56 @@
 
 An ETL pipeline that downloads historical stock market data, cleans and transforms it with pandas, loads it into SQLite, and runs SQL analysis across multiple tickers. ML is used to train a baseline model to predict next day closing prices.
 
+## Overview
+
+The pipeline runs in three stages:
+
+1. **Extract** - downloads historical stock data for a list of tickers and saves it as raw CSV files
+2. **Transform** - cleans each file (removes duplicates and missing values) and creates features (daily price change, daily return (%), daily trading range, and 5-day/20-day moving averages and volatility)
+3. **Load** - writes the processed data for every ticker into a single SQLite table (`stock_prices`), tagging each row with its ticker
+
+From there, `queries.py` runs SQL analysis across all tickers, and `model.py` trains a linear regression model as an extension beyond the core pipeline.
+
+## Requirements
+
+- Python 3.14
+- pandas
+- SQLite (`sqlite3`)
+- scikit-learn
+- Matplotlib
+
+
+## Installation
+
+```bash
+git clone https://github.com/leela-l/financial-data-pipeline.git
+cd financial-data-pipeline
+pip install -r requirements.txt
+```
+
+## How to run
+
+```bash
+python main.py
+```
+
+This runs extract → transform → load. To run the SQL analysis or the prediction model separately:
+
+```bash
+python src/queries.py
+python src/model.py
+```
+
+## ML Next Day Close Prediction
+
+`model.py` trains a linear regression model per ticker to predict the next day's closing price, using same day features (5-day and 20-day moving averages, daily return, 5-day volatility).
+
+The data is split chronologically (earliest 80% for training, most recent 20% for testing) rather than shuffled randomly since data is time dependent.
+
+Prediction plots (actual vs. predicted close over the test period) are saved to `Data/processed/`.
+<img width="1000" height="500" alt="TSLA_prediction_plot" src="https://github.com/user-attachments/assets/7a45d217-fe25-4fc1-900c-f4e362a06768" />
+
+
 ## Output Example
 Deleted old database  
 Deleted Data\raw\AAPL.csv  
@@ -77,51 +127,3 @@ Performing machine learning predictions...
 [AMZN] Mean absolute error on next-day close prediction: $5.05  
 [TSLA] Mean absolute error on next-day close prediction: $11.02  
 Pipeline complete  
-
-## Overview
-
-The pipeline runs in three stages:
-
-1. **Extract** - downloads historical stock data for a list of tickers and saves it as raw CSV files
-2. **Transform** - cleans each file (removes duplicates and missing values) and creates features (daily price change, daily return (%), daily trading range, and 5-day/20-day moving averages and volatility)
-3. **Load** - writes the processed data for every ticker into a single SQLite table (`stock_prices`), tagging each row with its ticker
-
-From there, `queries.py` runs SQL analysis across all tickers, and `model.py` trains a linear regression model as an extension beyond the core pipeline.
-
-## Requirements
-
-- Python 3.14
-- pandas
-- SQLite (`sqlite3`)
-- scikit-learn
-- Matplotlib
-
-
-## Installation
-
-```bash
-git clone https://github.com/leela-l/financial-data-pipeline.git
-cd financial-data-pipeline
-pip install -r requirements.txt
-```
-
-## How to run
-
-```bash
-python main.py
-```
-
-This runs extract → transform → load. To run the SQL analysis or the prediction model separately:
-
-```bash
-python src/queries.py
-python src/model.py
-```
-
-## ML Next Day Close Prediction
-
-`model.py` trains a linear regression model per ticker to predict the next day's closing price, using same day features (5-day and 20-day moving averages, daily return, 5-day volatility).
-
-The data is split chronologically (earliest 80% for training, most recent 20% for testing) rather than shuffled randomly since data is time dependent.
-
-Prediction plots (actual vs. predicted close over the test period) are saved to `Data/processed/`.
