@@ -12,6 +12,15 @@ The pipeline runs in three stages:
 
 From there, `queries.py` runs SQL analysis across all tickers, and `model.py` trains a linear regression model as an extension beyond the core pipeline.
 
+## ML Next Day Close Prediction
+
+`model.py` trains a linear regression model per ticker to predict the next day's closing price, using same day features (5-day and 20-day moving averages, daily return, 5-day volatility).
+
+The data is split chronologically (earliest 80% for training, most recent 20% for testing) rather than shuffled randomly since data is time dependent.
+
+Prediction plots (actual vs. predicted close over the test period) are saved to `Data/processed/`.
+<img width="1000" height="500" alt="TSLA_prediction_plot" src="https://github.com/user-attachments/assets/7a45d217-fe25-4fc1-900c-f4e362a06768" />
+
 ## Requirements
 
 - Python 3.14
@@ -41,16 +50,6 @@ This runs extract → transform → load. To run the SQL analysis or the predict
 python src/queries.py
 python src/model.py
 ```
-
-## ML Next Day Close Prediction
-
-`model.py` trains a linear regression model per ticker to predict the next day's closing price, using same day features (5-day and 20-day moving averages, daily return, 5-day volatility).
-
-The data is split chronologically (earliest 80% for training, most recent 20% for testing) rather than shuffled randomly since data is time dependent.
-
-Prediction plots (actual vs. predicted close over the test period) are saved to `Data/processed/`.
-<img width="1000" height="500" alt="TSLA_prediction_plot" src="https://github.com/user-attachments/assets/7a45d217-fe25-4fc1-900c-f4e362a06768" />
-
 
 ## Output Example
 Deleted old database  
